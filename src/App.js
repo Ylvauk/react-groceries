@@ -1,9 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-// import ListItem from './ListItem';
-
+import ListItem from './Components/ListItem.js';
+import ListTotal from './Components/ListTotal.js';
+import { useState } from 'react';
 function App() {
-	const groceries = [
+	const groceriesData = [
 		{
 			item: 'Flour',
 			brand: 'Golden Start',
@@ -40,9 +41,26 @@ function App() {
 			isPurchased: true,
 		},
 	];
+	const [groceries, setGroceries] = useState(groceriesData);
+	function handleDelete(itemName) {
+		const updatedItems = groceries.filter(
+			(grocery) => grocery.item !== itemName
+		);
+		setGroceries(updatedItems);
+	}
 	return (
 		<div className='groceries'>
-			<h1 className='groceries__title'>My Groceries</h1>
+			<h1 className='groceries_title'>My Groceries</h1>
+			<div className='groceries_content'>
+			<ul className='groceries_list'>
+	{groceries
+		.filter((element) => element.isPurchased === false)
+		.map((element, index) => {
+			return <ListItem groceryItem={element} key={index} handleDelete={handleDelete} />;
+		})}
+	<ListTotal groceries={groceries} />
+</ul>
+</div>
 		</div>
 	);
 }
